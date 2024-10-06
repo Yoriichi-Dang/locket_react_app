@@ -15,8 +15,12 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as MediaLibrary from "expo-media-library";
+import Avatar from "components/home/avatar";
+import UserIcon from "components/icons/user-icon";
+import { useRouter } from "expo-router";
 
 export default function Home() {
+  const router = useRouter();
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
@@ -69,9 +73,25 @@ export default function Home() {
 
   return (
     <SafeAreaView className="flex-1 justify-start items-center bg-black">
+      <View className="relative flex-row justify-center items-center w-full  p-3">
+        <TouchableOpacity
+          onPress={() => {
+            router.push("/(tabs)/profile");
+          }}
+          className="w-16 h-16 absolute left-0 top-0 p-1 items-center justify-center rounded-full border-2 border-primary-300 bg-primary-500"
+        >
+          <Avatar avatarUrl={require("../../assets/images/avatar.jpg")} />
+        </TouchableOpacity>
+        <View className="bg-gray-800 flex-row items-center px-4 py-3 rounded-3xl">
+          <UserIcon size={24} color="white" />
+          <Text className="ml-2 text-base font-bold text-white">
+            5 người bạn
+          </Text>
+        </View>
+      </View>
       <CameraView
         ref={cameraRef}
-        className="overflow-hidden relative w-full h-1/2 rounded-[60px] border-4 border-primary-400 mt-28"
+        className="overflow-hidden relative w-full h-1/2 rounded-[60px] border-4 border-primary-400 mt-20"
         facing={facing}
       >
         {/* <View className="absolute bottom-8 w-full px-8">
@@ -82,19 +102,19 @@ export default function Home() {
           />
         </View> */}
       </CameraView>
-      <View className="w-3/4 justify-center items-center  mt-12">
-        {/* <TouchableOpacity className="p-4 ">
-              <CameraReverseIcon size={45} color="white" />
-            </TouchableOpacity> */}
+      <View className="w-full relative flex-row justify-center items-center  mt-12">
+        <TouchableOpacity className="p-4 absolute left-12 ">
+          <CameraReverseIcon size={45} color="white" />
+        </TouchableOpacity>
         <TouchableOpacity
           onPress={takePicture}
-          className="p-4 border-2 absolute top-0  border-primary-200 rounded-full"
+          className="p-4 border-2  top-0  border-primary-200 rounded-full"
         >
           <CameraIcon size={45} color="white" />
         </TouchableOpacity>
-        {/* <TouchableOpacity>
+        <TouchableOpacity className="p-4 absolute right-12">
           <FlashIcon size={45} color="white" />
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
