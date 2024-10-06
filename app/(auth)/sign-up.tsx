@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import React from "react";
 import Center from "components/common/center";
@@ -18,8 +19,24 @@ import InputField from "components/auth/input-field";
 import EmailIcon from "components/icons/email-icon";
 import UserIcon from "components/icons/user-icon";
 import LockIcon from "components/icons/lock-icon";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { registerSchema } from "schemas/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 const SignUpPage = () => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<z.infer<typeof registerSchema>>({
+    mode: "onChange",
+    resolver: zodResolver(registerSchema),
+  });
+
+  const onSubmit: SubmitHandler<z.infer<typeof registerSchema>> = (data) => {
+    Alert.alert(JSON.stringify(data));
+  };
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -45,23 +62,26 @@ const SignUpPage = () => {
             />
             <Text className="text-4xl font-DSSemibold ml-2">Thuong</Text>
           </View>
-          <View className="mt-14 justify-start w-full px-10">
+          <View className="mt-10 justify-start w-full px-10">
             <Text className="text-lg font-Pmedium ml-1">
               Sign up new account!
             </Text>
             <InputField
+              control={control}
               name="email"
               placeholderTextColor="#433D8B"
               placeholder="Email"
               icon={<EmailIcon color="#433D8B" size={20} />}
             />
             <InputField
-              name="login_name"
+              control={control}
+              name="loginName"
               placeholderTextColor="#433D8B"
               placeholder="Login name"
               icon={<UserIcon color="#433D8B" size={20} />}
             />
             <InputField
+              control={control}
               isPassword={true}
               name="password"
               placeholderTextColor="#433D8B"
@@ -69,8 +89,9 @@ const SignUpPage = () => {
               icon={<LockIcon color="#433D8B" size={20} />}
             />
             <InputField
+              control={control}
               isPassword={true}
-              name="confirm_password"
+              name="confirmPassword"
               placeholderTextColor="#433D8B"
               placeholder="Confirm password"
               icon={<LockIcon color="#433D8B" size={20} />}

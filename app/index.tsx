@@ -1,9 +1,14 @@
 import { View, Text } from "react-native";
 import React, { useEffect } from "react";
 import { useRouter } from "expo-router";
+import { useAuth } from "contexts/auth-provider";
 
 const SplashPage = () => {
   const router = useRouter();
+  const { isAuthenticated } = useAuth();
+  if (isAuthenticated) {
+    router.replace("/(tabs)");
+  }
   useEffect(() => {
     const timeout = setTimeout(() => {
       router.replace("/(auth)/sign-in");

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
+import { AuthProvider } from "contexts/auth-provider";
 SplashScreen.preventAutoHideAsync();
 const RootLayout = () => {
   const [loaded, error] = useFonts({
@@ -33,9 +34,13 @@ const RootLayout = () => {
     return null;
   }
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="index" options={{}} />
-    </Stack>
+    <AuthProvider>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" options={{}} />
+        <Stack.Screen name="(auth)/sign-in" options={{}} />
+        <Stack.Screen name="(auth)/sign-up" options={{}} />
+      </Stack>
+    </AuthProvider>
   );
 };
 
