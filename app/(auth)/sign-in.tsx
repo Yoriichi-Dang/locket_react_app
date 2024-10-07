@@ -12,7 +12,7 @@ import React, { useEffect, useState } from "react";
 import Center from "components/common/center";
 import Divider from "components/auth/divider";
 import GoogleIcon from "components/icons/google-icon";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import InputField from "components/auth/input-field";
 import EmailIcon from "components/icons/email-icon";
 import LockIcon from "components/icons/lock-icon";
@@ -25,7 +25,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "contexts/auth-provider";
 const SignInPage = () => {
   const { signIn } = useAuth();
-
+  const router = useRouter();
   const httpService = new HttpService();
   const {
     control,
@@ -46,6 +46,7 @@ const SignInPage = () => {
         await AsyncStorage.setItem("access_token", responseData.access_token);
         await AsyncStorage.setItem("refresh_token", responseData.refresh_token);
         signIn(responseData.access_token);
+        router.replace("/(tabs)");
       }
     } catch (err) {
       console.error("Login failed", err);

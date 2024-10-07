@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Avatar from "components/home/avatar";
 import AttachIcon from "components/icons/attach-icon";
@@ -20,8 +20,20 @@ import LockCloseIcon from "components/icons/lock-close-icon";
 import InstagramIcon from "components/icons/instagram-icon";
 import CollectionIcon from "components/icons/collection-icon";
 import ImageIcon from "components/icons/image-icon";
+import { useAuth } from "contexts/auth-provider";
+import axios from "axios";
+import HttpService from "services/http-service";
 
 const ProfilePage = () => {
+  const { session } = useAuth();
+  const httpService = new HttpService();
+  useEffect(() => {
+    const fetchProfileUser = async () => {
+      const response = await httpService.get("/profile", {}, true);
+      console.log(response.data);
+    };
+    fetchProfileUser();
+  }, []);
   return (
     <SafeAreaView className="flex-1 bg-primary-600">
       <ScrollView>
@@ -42,7 +54,7 @@ const ProfilePage = () => {
             className="w-auto border flex-row items-center border-primary-100 bg-primary-400 px-3 py-2 rounded-2xl"
           >
             <Text className="text-lg mr-1 text-primary-200 font-Pmedium">
-              yorichi2003
+              {session?.loginName}
             </Text>
             <LinkIcon size={24} color="#D5D4D4FF" />
           </TouchableOpacity>
